@@ -8,14 +8,14 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;    // Veja como é toda a instanciação do componente response
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request)  
     {
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
@@ -24,11 +24,11 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Route("/contato")
+     * @Route("/email")
      * @return string
      */
-    public function contatoAction()
+    public function contatoAction()   /// Renderiza o TRwig
     {
-        return new Response(':)');
+        return $this->render('default/email.html.twig');
     }
 }
