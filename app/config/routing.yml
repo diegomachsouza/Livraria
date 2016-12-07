@@ -1,8 +1,8 @@
 livraria:
     resource: "@LivrariaBundle/Controller/"
-    type:     annotation 
+    type:     annotation
     prefix:   /
 
 #app:
- #   resource: "@AppBundle/Controller/"
-  #  type:     annotation
+#    resource: "@AppBundle/Controller/"
+#    type:     annotation
