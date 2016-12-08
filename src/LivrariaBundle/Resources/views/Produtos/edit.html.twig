@@ -5,17 +5,17 @@
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+        <p align="right"><input type="submit" value="Salvar a Nova Edição" />
     {{ form_end(edit_form) }}
 
     <ul>
         <li>
-            <a href="{{ path('produtos_index') }}">Back to the list</a>
+            {{ form_start(delete_form) }}
+                <p align="right"><input type="submit" value="Deletar">
+            {{ form_end(delete_form) }} 
         </li>
         <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
+            <p align="left"><a href="{{ path('produtos_index') }}">Voltar a Lista</a>
         </li>
     </ul>
 {% endblock %}
