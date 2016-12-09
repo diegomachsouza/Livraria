@@ -1,65 +1,93 @@
 {% extends 'base.html.twig' %}
 
-{%block title %} Frente de Loja {% endblock %}
+{% block title %}Frente de Loja{% endblock %}
 
 {% block body %}
-    
+
     <div class="row">
-        <div class='col-md-4'>
+        <div class="col-md-4">
             
             <div class="panel panel-default">
                 
-                <div class='panel-body'>
-                    <div class='input-group'>
+                <div class="panel-body">
+                    
+                    <div class="input-group">
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-ok"></span>
-                            <input type="text" class="form-control"/>
-                            <span class="input-group-btn"> </span>
+                            <span class="glyphicon glyphicon-barcode"></span>
+                        </span>
+                        <input type="text" class="form-control" />
+                        <span class="input-group-btn">
                             <button type="button" class="btn btn-success">
                                 <span class="glyphicon glyphicon-ok"></span>
                             </button>
                         </span>
                     </div>
                     
+                    
                     <div class="thumbnail">
-                        <img src="">
+                        <img src="http://lorempixel.com/240/240/" width="240" height="240">
                         <div class="caption">
-                            <h3> Nome do Produto </h3>
-                            <p> Descrição do produto </p>
-                            <p> Preço unitario </p>
+                          <h3>Nome do Produto</h3>
+                          <p>Descrição do produto</p>
+                          <p>Preço Unitário: R$ 123,56</p>
                         </div>
-                     </div>
+                  </div>
                     
-                    
-                    
+                </div>
+
+            </div>
+            
+        </div>
+        
+        <div class="col-md-8">
+           
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    Carrinho de Compras
+                </div>
+                
+                <div class="panel-body">
+                    <ol>
+                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
+                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
+                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
+                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
+                    </ol>
+                </div>
+                
+                <div class="panel-footer">
+                    Total a pagar: R$ 0,00
                 </div>
             </div>
             
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-estorno">Estornar Item</button>
+            <button type="button" class="btn btn-danger">Cancelar Venda</button>
+            <button type="button" class="btn btn-success">Concluir Venda</button>
             
             
         </div>
     </div>
     
-    
-    <div class="modal-estorno" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-        </div>
+ <div id="modal-estorno" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" >Estorno de Item</h4>
+      </div>
         
         <div class="modal-body">
-            <div class="form-group"> 
-            <label> Informe o numero do item:</label>
-            <input type="text" class="form-control" />
-            
-            <button type="button" class="btn btn-success">COnfirmar</button>
+            <div class="form-group">
+                <label>Informe o número do item:</label>
+                <input type="text" class="form-control" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success">Confirmar</button>
             </div>
         </div>
         
     </div>
   </div>
+</div>
     
-{%endblock%}
+{% endblock %}
