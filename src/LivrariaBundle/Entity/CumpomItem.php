@@ -53,7 +53,7 @@ class CumpomItem
      *
      * @ORM\Column(type="decimal", scale=2)
      */
-    private $valorUnitario;
+    private $valorUnitario implements \JsonSerielizable;
     
     
 
@@ -137,5 +137,15 @@ class CumpomItem
     public function getCupomId()
     {
         return $this->cupomId;
+    }
+    
+    public function jsonSerialize()
+    {
+        return array(
+            "descricao"=>  $this->getDescricaoItem();
+            "valor"=>  $this->getValorUnitario();
+            //"numOrdem"=>  $this->getOrdemItem();
+            //"codigo"=> $this->getCodigo();
+        )
     }
 }

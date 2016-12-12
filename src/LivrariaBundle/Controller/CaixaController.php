@@ -26,10 +26,12 @@ class CaixaController extends Controller
         $cupom = new Cumpom();
         $cupom->setData(new \DateTime());
         $cupom->setValorTotal(0);
+        $cupom->setVendedor(1);
         
         $em->persist($cupom);  //Pega o obj e joga na camada de persistência da memória
         $em->flush();           //O flush joga no BD e descarta
-        //dump($cupom);die();
+
+        
         $request->getSession()->set('cupom-id', $cupom->getId());
         
         
@@ -38,36 +40,56 @@ class CaixaController extends Controller
     }
     
     /**
-     * @Route("/caixa/carregar")
-     * @Method POST
+     * @Route("/caixa/carregar", name="pesquisar")
+     * @Method("POST")
      */
-    public function carregarProdutoAction(Request $request)
+    public function carregarProdutoAction(Request $request) 
     {
          $em = $this->getDoctrine()->getManager();
+       
+         $codProd = $request->request->get('codigo');
+         
          $produto = $em->getRepository('LivrariaBundle:Produtos')
                  ->find($codProd);
          
-         if($produto == null)
+         $cupomId = $request->getSession()->get('cupom-id');
+         $cupom = $em->getRepository('LivrariaBundle:Cumpom')->find($cupomId);
+         
+         $quantItem = $em->getRepository('LivrariaBundle:CumpomItem')->findBy(array("cupomId" => $cupomId));
+         
+
+                 
+         /* if($produto == null)
          {
              return $this->json('erro');
+         } */
+         
+         if ($produto instanceof Produtos)
+         {
+             $novoItem = new CumpomItem();
+             $novoItem->setCupomId($cupom);
+             $novoItem->setDescricaoItem($produto->getNome());
+             $novoItem->setItemCod($codProd);
+             $novoItem->setQuantidade(1);
+             $novoItem->setValorUnitario($produto->getPreco());
+             $novoItem->setOrderItem(count($quantItem)+1);
+             
+             $em->persists($novoItem); //Pega o obj e joga na camada de persistência da memória
+             $em->flush();              //O flush joga no BD e descarta
+             
+             $retorno['status'] = "ok";
+             $retorno["produto"] = $produto;
+             
+         } else{
+             $retorno['status'] = "erro";
+             $retorno["mensagem"] = "Produto não encontrado";
          }
          
-         $novoItem = new CupomItem();
-         $novoItem->setCupomId($request->getSession()->get('cupom_id'));
-         //$novoItem->setDescricao
-         $novoItem->setItemCod($codProd);
-         $novoItem->setQuantidade(1);
-         
-         
-         $em->persist($novoItem);  //Pega o obj e joga na camada de persistência da memória
-         $em->flush();           //O flush joga no BD e descarta
-        
-        return $this->json('ok');
-         
+         return $this->json('ok');
     }
     
     /**
-     *@Route("/caixa/Estorno"/{item})
+     *@Route("/caixa/Estorno/{item}")
      */
     public function estornarItemAction(Request $request, $item)
     {
@@ -89,6 +111,9 @@ class CaixaController extends Controller
         
         $em->persist($cupom);  //Pega o obj e joga na camada de persistência da memória
         $em->flush();           //O flush joga no BD e descarta
+        
+        
+       
         
         return $this->json('ok');
         
