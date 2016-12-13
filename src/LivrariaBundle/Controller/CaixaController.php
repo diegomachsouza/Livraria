@@ -89,7 +89,7 @@ class CaixaController extends Controller
     }
     
     /**
-     *@Route("/caixa/Estorno/{item}")
+     *@Route("/caixa/Estorno/{item}", name="item-estorno")
      */
     public function estornarItemAction(Request $request, $item)
     {
@@ -97,30 +97,31 @@ class CaixaController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $item = $em->getRepository('LivrariaBundle:CumpomItem')->findBy(array(
+        $itemOld = $em->getRepository('LivrariaBundle:CumpomItem')->findBy(array(
             'cupomId'=>$cupomId,
             'ordemItem'=>$item
         ));
         
+        $cupom = $em->getRepository('LivrariaBundle:Produtos')
+                ->find($cupomId);
+        
+        
         $itemEstorno = new CumpomItem();
-        $itemEstorno->setCupomId($cupomId);
+        $itemEstorno->setCupomId($cupom);
         $itemEstorno->setDescricaoItem("Estorno do Item: $item");
-        $itemEstorno->setItemCod(1001);
+        $itemEstorno->setItemCod(9999);  //No fechamento, isso bate!
         $itemEstorno->setQuantidade(1);
-        $itemEstorno->setValorUnitario($item->getVAlorUnitario() * -1);
+        $itemEstorno->setValorUnitario($item->getValorUnitario() * -1);
         
         $em->persist($cupom);  //Pega o obj e joga na camada de persistência da memória
         $em->flush();           //O flush joga no BD e descarta
-        
-        
-       
-        
-        return $this->json('ok');
+
+        return $this->redirectToRoute('caixa-index');
         
     }
     
     /**
-     * @Route("/caixa/Cancelar")
+     *@Route("/caixa/Cancelar", name="cancelar")
      */
     public function cancelarVendaAction(Request $request)
     {
@@ -134,8 +135,13 @@ class CaixaController extends Controller
         $em->flush();           //O flush joga no BD e descarta
         
         return $this->json('ok');
+        
+        
     }
     
+    /**
+     *@Route("/caixa/Cancelar", name="finalizarVenda")
+     */
     public function finalizarVendaAction(Request $request)
     {
         $cupomId = $request->getSession()->get('cupom_id');
@@ -143,15 +149,37 @@ class CaixaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $cupom = $em->getRepository('LivrariaBundle:Cumpom')->find($cupomId);
         
+        $valotTotal = 0;
+        
+        
+        $items = $em->getRepository("LivrariaBundle:CumpomItem")
+                ->findBy(array(
+                    "cupomId" => $request->getSession()->get('cupom-id')
+                )); 
+        forEach($items as $item)
+        {
+            $valorTotal = +$item->getValorUnitario();
+            $produto = $em->getRepository('LivrariaBundle:Produtos')->find($item->getItemCod());
+            
+            $produto->setQuantidade($produto->getQuantidade() -1);
+            $em->persist($produto);  
+        }
+        
+        
+        
+        
+        $cupom->setValorTotal($valorTotal);
+        
         $cupom->setStatus('FINALIZADO');
         $em->persist($cupom);  //Pega o obj e joga na camada de persistência da memória
         $em->flush();           //O flush joga no BD e descarta
         
+        $request->getSession()->set('cupom-id', null);
+        
         //Baixar os items no estoque
         //Fechar o total da compra
         
-        return $this->json('ok');
-        
+        //return $this->json('ok');
     }
     
     /**
