@@ -50,7 +50,7 @@
                     Carrinho de Compras
                 </div>
                 
-                <div class="panel-body">
+                <div class="panel-body" id="lista-produtos">
                     <ol>
                         <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
                         <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
@@ -98,27 +98,30 @@
 
 {% block javascripts %}
        <script type="text/javascript"> 
-           $(document).ready(function){
-               $('#form-produto').submit(function(evento{
+           $(document).ready(function (){
+               
+               listagem_produtos();
+               $('#form-produto').submit(function(evento){
                    evento.preventDefault();
                    
                    var valores = {
                        "codigo": $('#cod-prod').val()
                    };
-                   $.post({{ path('pesquisar') }}, valores, function(retorno){
+                   $.post("{{ path('pesquisar') }}", valores, function(retorno){
                        if (retorno.status == 'ok'){
                            $('#erro').addClass('hide');
                            $('#produto_detalhe').removeClass('hide');
+                           listagem_produtos();
                        }
                        else{
                            $('#erro').removeClass('hide');
                            $('#produto_detalhe').addClass('hide');
                        }
                        
-                       console.log(retorno));
+                
                    });
                });
-           };
+           });
            
            function listagem_produtos()
            {
