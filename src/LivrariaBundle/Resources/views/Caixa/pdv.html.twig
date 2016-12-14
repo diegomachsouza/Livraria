@@ -52,10 +52,7 @@
                 
                 <div class="panel-body" id="lista-produtos">
                     <ol>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
+
                     </ol>
                 </div>
                 
@@ -65,8 +62,8 @@
             </div>
             
             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-estorno">Estornar Item</button>
-            <button type="button" class="btn btn-danger">Cancelar Venda</button>
-            <button type="button" class="btn btn-success">Concluir Venda</button>
+            <a href="{{ path('cancelar')}}" class="btn btn-danger"> Cancelar Venda</a>
+            <a href="{{ path('finalizarVenda')}}" class="btn btn-success">Concluir Venda</a>
             
             
         </div>
@@ -84,7 +81,7 @@
         <div class="modal-body">
             <div class="form-group">
                 <label>Informe o número do item:</label>
-                <input type="text" class="form-control" />
+                <input id="item-estorno" type="text" class="form-control" />
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-success">Confirmar</button>
             </div>
@@ -109,8 +106,8 @@
                    };
                    $.post("{{ path('pesquisar') }}", valores, function(retorno){
                        if (retorno.status == 'ok'){
-                           $('#erro').addClass('hide');
-                           $('#produto_detalhe').removeClass('hide');
+                          // $('#erro').addClass('hide');
+                          // $('#produto_detalhe').removeClass('hide');
                            listagem_produtos();
                        }
                        else{
@@ -121,6 +118,12 @@
                 
                    });
                });
+               $('#bt-confirmar-estorno').click(function(){
+                   var numItem = $('#item-estorno').val();
+                   
+                   location.href = "/caixa/estorno/"+numItem;
+               });
+                   
            });
            
            function listagem_produtos()
@@ -141,6 +144,10 @@
                
                
            });
+           
+           
+           
+           
            }
            
        </script>

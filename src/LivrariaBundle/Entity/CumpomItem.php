@@ -10,56 +10,55 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * ORM\Table(name="cupom_item")
  */
-class CumpomItem 
+class CumpomItem implements \JsonSerializable
 { 
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    
     private $id;
-     /**
+    
+    /**
+     *@ORM\cupomId
      * @ORM\ManyToOne(targetEntity="Cumpom")
      * @ORM\JoinColumn(name="cupom_id", referencedColumnName="id")
      */
-    
     private $cupomId;
     
     /**
-     * ORM\Column(type="integer")
+     *@ORM\ordemItem
+     *@ORM\Column(type="integer")
      */
     private $ordemItem;
     
     /**
-     *
-     * ORM\Column(type="integer")
+     *@ORM\itemCod
+     * @ORM\Column(type="integer")
      */
     private $itemCod;
     
     /**
+     *@ORM\descricaoItem 
      * @ORM\Column(type="string", length=100)
      */
     private $descricaoItem;
     
     /**
-     *
-     * @return integer
-     */
-    
+     *@ORM\qauntidade
+     * @ORM\Column(type="integer")
+     */    
     private $quantidade;
     
     /**
-     *
+     *@ORM\valorUnitario
      * @ORM\Column(type="decimal", scale=2)
      */
-    private $valorUnitario implements \JsonSerielizable;
-    
-    
+    private $valorUnitario;
+  
 
     /**
      * Get id
-     *
      * @return integer
      */
     public function getId()
@@ -142,10 +141,10 @@ class CumpomItem
     public function jsonSerialize()
     {
         return array(
-            "descricao"=>  $this->getDescricaoItem();
-            "valor"=>  $this->getValorUnitario();
+            "descricao"=>  $this->getDescricaoItem(),
+            "valor"=>  $this->getValorUnitario(),
             //"numOrdem"=>  $this->getOrdemItem();
             //"codigo"=> $this->getCodigo();
-        )
+        );
     }
 }
